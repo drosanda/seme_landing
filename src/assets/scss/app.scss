@@ -1,0 +1,30 @@
+@charset 'utf-8';
+
+@import 'theme/default';
+//  Seme_AdminHTML settings.
+@import "//fonts.googleapis.com/css?family=Lato:300,400,400italic,600,600italic,700,700italic";
+
+@import "node_modules/nprogress/nprogress";
+@import "node_modules/animate-sass/animate";
+@import "node_modules/font-awesome/scss/font-awesome";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "animation";
+@import "preloader";
+@import "main";
+@import "header";
+@import "footer";
+@import "sidebar";
+@import "content";
+@import "extended";
+@import "helper";
+@import "responsive";
+@import "print";
+@import "login";
+
+/*
+  Custom Styles:
+  Add your scss files below to structure your project styles
+*/
+* {
+  font-family: "Lato",cursive;;
+}
