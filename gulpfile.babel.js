@@ -1,18 +1,23 @@
 'use strict';
 
-import plugins       from 'gulp-load-plugins';
-import yargs         from 'yargs';
-import browser       from 'browser-sync';
-import gulp          from 'gulp';
-import rimraf        from 'rimraf';
-import yaml          from 'js-yaml';
-import fs            from 'fs';
-import dateFormat    from 'dateformat';
+import _ from 'lodash';
+import plugins from 'gulp-load-plugins';
+import yargs from 'yargs';
+import browser from 'browser-sync';
+import gulp from 'gulp';
+import rimraf from 'rimraf';
+import yaml from 'js-yaml';
+import fs from 'fs';
+import dateFormat from 'dateformat';
 import webpackStream from 'webpack-stream';
-import webpack2      from 'webpack';
-import named         from 'vinyl-named';
-import log           from 'fancy-log';
-import colors        from 'ansi-colors';
+import webpack2 from 'webpack';
+import named from 'vinyl-named';
+import log from 'fancy-log';
+import colors from 'ansi-colors';
+import dartSass from 'sass'
+import gulpSass from 'gulp-sass'
+const cSass = gulpSass(dartSass)
+
 var uglify = require('gulp-terser');
 
 // Load all Gulp plugins into one variable
@@ -32,7 +37,7 @@ function checkFileExists(filepath) {
   let flag = true;
   try {
     fs.accessSync(filepath, fs.F_OK);
-  } catch(e) {
+  } catch (e) {
     flag = false;
   }
   return flag;
@@ -48,7 +53,7 @@ function loadConfig() {
     let ymlFile = fs.readFileSync('config.yml', 'utf8');
     return yaml.load(ymlFile);
 
-  } else if(checkFileExists('config-default.yml')) {
+  } else if (checkFileExists('config-default.yml')) {
     // config-default.yml exists, load it
     log(colors.bold(colors.cyan('config.yml')), 'does not exist, loading', colors.bold(colors.cyan('config-default.yml')));
     let ymlFile = fs.readFileSync('config-default.yml', 'utf8');
@@ -66,12 +71,12 @@ function loadConfig() {
 function fonts() {
   log(colors.green('Font Awesome pasted!'));
   return gulp.src('node_modules/font-awesome/fonts/*')
-    .pipe(gulp.dest(PATHS.dist+'/fonts'))
+    .pipe(gulp.dest(PATHS.dist + '/fonts'))
 }
 function glyph() {
   log(colors.green('Glyphicon pasted!'));
   return gulp.src('node_modules/bootstrap-sass/assets/fonts/bootstrap/*')
-    .pipe(gulp.dest(PATHS.dist+'/fonts/bootstrap/'))
+    .pipe(gulp.dest(PATHS.dist + '/fonts/bootstrap/'))
 }
 
 // Delete the "dist" folder
@@ -92,10 +97,10 @@ function copy() {
 function sass() {
   return gulp.src(['src/assets/scss/app.scss'])
     .pipe($.sourcemaps.init())
-    .pipe($.sass({
+    .pipe(cSass({
       includePaths: PATHS.sass
     })
-      .on('error', $.sass.logError))
+      .on('error', cSass.logError))
     .pipe($.autoprefixer({
       browsers: COMPATIBILITY
     }))
@@ -139,10 +144,10 @@ const webpack = {
       .pipe(webpackStream(webpack.config, webpack2))
       .pipe(
         $.if(
-          PRODUCTION, 
-          uglify({ 
-           mangle: false, 
-           ecma: 6 
+          PRODUCTION,
+          uglify({
+            mangle: false,
+            ecma: 6
           })
         )
       )
@@ -179,22 +184,22 @@ gulp.task('webpack:watch', webpack.watch);
 function images() {
   return gulp.src('src/assets/images/**/*')
     .pipe($.if(PRODUCTION, $.imagemin([
-      $.imagemin.jpegtran({
+      $.imagemin.mozjpeg({
         progressive: true,
       }),
       $.imagemin.optipng({
         optimizationLevel: 5,
       }),
-			$.imagemin.gifsicle({
+      $.imagemin.gifsicle({
         interlaced: true,
       }),
-			$.imagemin.svgo({
+      $.imagemin.svgo({
         plugins: [
-          {cleanupAttrs: true},
-          {removeComments: true},
+          { cleanupAttrs: true },
+          { removeComments: true },
         ]
       })
-		])))
+    ])))
     .pipe(gulp.dest(PATHS.dist + '/images'));
 }
 
@@ -210,7 +215,7 @@ function archive() {
 }
 
 // PHP Code Sniffer task
-gulp.task('phpcs', function() {
+gulp.task('phpcs', function () {
   return gulp.src(PATHS.phpcs)
     .pipe($.phpcs({
       bin: 'wpcs/vendor/bin/phpcs',
@@ -223,13 +228,13 @@ gulp.task('phpcs', function() {
 // PHP Code Beautifier task
 gulp.task('phpcbf', function () {
   return gulp.src(PATHS.phpcs)
-  .pipe($.phpcbf({
-    bin: 'wpcs/vendor/bin/phpcbf',
-    standard: './codesniffer.ruleset.xml',
-    warningSeverity: 0
-  }))
-  .on('error', log)
-  .pipe(gulp.dest('.'));
+    .pipe($.phpcbf({
+      bin: 'wpcs/vendor/bin/phpcbf',
+      standard: './codesniffer.ruleset.xml',
+      warningSeverity: 0
+    }))
+    .on('error', log)
+    .pipe(gulp.dest('.'));
 });
 
 // Start BrowserSync to preview the site in
@@ -279,4 +284,3 @@ gulp.task('default',
 // Package task
 gulp.task('package',
   gulp.series('build', archive));
-  
