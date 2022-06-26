@@ -1,60 +1,81 @@
 section#header {
-    margin: 0;
-    padding: 10px 0;
-    background-color: #fff;
-    border-radius: 5px 5px 0 0;
+  margin          : 0;
+  padding         : 10px 0;
+  background-color: #fff;
+  border-radius   : 5px 5px 0 0;
 }
+
 section#header .container {
   min-height: auto;
 }
+
 section#header .logo img {
-    margin: 0;
-    padding: 0;
-    max-height: 50px;
-    vertical-align: middle;
+  margin        : 0;
+  padding       : 0;
+  max-height    : 50px;
+  vertical-align: middle;
 }
 
 ul.top-nav {
-    float: right;
-    margin-top: 8px;
-    padding-left: 0;
-    margin-bottom: 0;
-    list-style: none;
-    white-space: nowrap;
+  float        : right;
+  margin-top   : 8px;
+  padding-left : 0;
+  margin-bottom: 0;
+  list-style   : none;
+  white-space  : nowrap;
 }
-ul.top-nav>li, ul.top-nav>li>a {
-    display: inline-block;
-    position: relative;
-}
-ul.top-nav>li, ul.top-nav>li>a {
-    display: inline-block;
-    position: relative;
-}
+
+ul.top-nav>li,
 ul.top-nav>li>a {
-    padding: 6px 10px;
-    color: #777;
-    line-height: 20px;
-    text-decoration: none;
+  display : inline-block;
+  position: relative;
+}
+
+ul.top-nav>li,
+ul.top-nav>li>a {
+  display : inline-block;
+  position: relative;
+}
+
+ul.top-nav>li>a {
+  padding        : 6px 10px;
+  color          : #777;
+  line-height    : 20px;
+  text-decoration: none;
 }
 
 .navbar.navbar-abu {
   background-color: #ededed;
 }
+
 .navbar.navbar-biru {
   background-color: #81bad3;
 }
+
 .navbar-brand {
   padding: 10px 15px;
 }
+
 .navbar.navbar-biru .navbar-nav>li>a {
-  color: #ffffff;
+  color      : #ffffff;
   font-weight: bold;
 }
-.navbar.navbar-biru .nav > li > a:hover, .navbar.navbar-biru .nav > li > a:focus {
+
+.navbar.navbar-biru .nav>li>a:hover,
+.navbar.navbar-biru .nav>li>a:focus {
   background-color: #bcdaec;
-  color: #e61926;
+  color           : #e61926;
 }
 
 section#header .container {
-    min-height: auto;
+  min-height: auto;
+}
+
+.navbar {
+  height       : $navbar-height;
+  margin-bottom: $navbar-mb;
+}
+
+.navbar-default .navbar-toggle {
+  border-color: $navbar-border-color;
 }
