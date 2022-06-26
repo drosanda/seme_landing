@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import css from '../scss/app.scss';
 
 var is_log = 1;
 window.$ = $;
